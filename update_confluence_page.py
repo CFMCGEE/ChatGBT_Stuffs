@@ -264,6 +264,7 @@ Logic & Functionalty still yet to be implemented:
 - Removing files if they are removed from Confluence Page
 - Rather than updating entire table, only add rows to existing table
 - Checks for sub-folders in MASTER_FOLDER
+- Change user from file path to MASTER_FOLDER's account username
 - Timer set to refresh after period of time (automation later on?)
 
 """
