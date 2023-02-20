@@ -95,7 +95,7 @@ def refresh_excel_sheet_and_compare(page_content, excel_sheet, excel_sheet_path)
             files_being_added_to_confluence_page.append(row[0])
             print(f"{row[0]} is not found on the Confluence page.")
 
-    return str(f"The following files need to be added to the Confluence Page: {files_being_added_to_confluence_page}")
+    return str(f"The following items will be added to the Confluence Page: {files_being_added_to_confluence_page}")
 
 def get_est_time():
 
