@@ -27,8 +27,8 @@ from datetime import datetime, date
 from bs4 import BeautifulSoup as BS
 
 # Load the Excel file
-path_to_credentials = 'PUT_CREDENTIALS_LOCATION_HERE' 
 path_to_excel_sheet = 'PUT_EXCEL_SHEET_LOCATION_HERE'
+path_to_credentials = 'PUT_CREDENTIALS_LOCATION_HERE' 
 wb = openpyxl.load_workbook(filename=path_to_excel_sheet)
 ws = wb.active
 
