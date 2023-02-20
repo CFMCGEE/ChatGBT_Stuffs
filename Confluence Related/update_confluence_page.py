@@ -3,7 +3,7 @@
 The following should be modified for script to work efficiently:
 - PUT_EXCEL_SHEET_LOCATION_HERE
 - PUT_CREDENTIALS_LOCATION_HERE
-  - Use the "CREDENTIALS_FILE" template in neighoring file 
+  - Use the "CREDENTIALS_FILE" template in neighoring file (https://github.com/CFMCGEE/ChatGBT_Stuffs/blob/main/Confluence%20Related/CF_CREDENTIALS.txt)
 - MASTER_FOLDER
 
  """
