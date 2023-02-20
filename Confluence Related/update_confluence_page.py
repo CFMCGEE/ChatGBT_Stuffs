@@ -74,7 +74,7 @@ def refresh_excel_sheet_and_compare(page_content, excel_sheet, excel_sheet_path)
     time.sleep(5)
 
     # Closes Excel file
-    wb.Close()
+    wb.Close(SaveChanges=False)
     excel.Quit()
 
     # Waits 5 seconds before re-opening excel sheet
