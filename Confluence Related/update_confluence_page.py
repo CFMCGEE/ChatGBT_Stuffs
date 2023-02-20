@@ -6,7 +6,7 @@ The following should be modified for script to work efficiently:
   - Use the "CREDENTIALS_FILE" template in neighoring file (https://github.com/CFMCGEE/ChatGBT_Stuffs/blob/main/Confluence%20Related/CF_CREDENTIALS.txt)
 - MASTER_FOLDER
 
-Install the following non-built in py libraries:
+Install the following non-built in py libraries (https://pypi.org/):
 - pip install openpyxl
 - pip install pywin32
 - pip install pytz
