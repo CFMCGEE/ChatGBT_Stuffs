@@ -3,8 +3,10 @@
 The following should be modified for script to work efficiently:
 - PUT_EXCEL_SHEET_LOCATION_HERE
 - PUT_CREDENTIALS_LOCATION_HERE
-  - Use the "CREDENTIALS_FILE" template in neighoring file (https://github.com/CFMCGEE/ChatGBT_Stuffs/blob/main/Confluence%20Related/CF_CREDENTIALS.txt)
+    - Use the "CREDENTIALS_FILE" template in neighoring file (https://github.com/CFMCGEE/ChatGBT_Stuffs/blob/main/Confluence%20Related/CF_CREDENTIALS.txt)
 - MASTER_FOLDER
+- URL_TO_CONFLUENCE_PAGE
+- CONFLUENCE_PAGE_ID
 
 Install the following non-built in py libraries (https://pypi.org/):
 - pip install openpyxl
@@ -13,11 +15,10 @@ Install the following non-built in py libraries (https://pypi.org/):
 - pip install atlassian-python-api
 - pip install bs4
 
- """
+"""
 
 import re
 import time
-import json
 import openpyxl
 import win32com.client as win32
 from pytz import timezone
@@ -55,7 +56,7 @@ def get_confluence_credentials(credentials_path):
 
     return api_token, username
 
-def refresh_excel_sheet_and_compare(confluence_instance, page_id, page_content, excel_sheet, excel_sheet_path):
+def refresh_excel_sheet_and_compare(page_content, excel_sheet, excel_sheet_path):
 
     # Remove HTML tags from the page content
     cleaned_content = re.sub('<[^<]+?>', '', page_content).replace("&amp;", "&")
@@ -147,7 +148,7 @@ def get_user_input(page_name, version_number):
         else:
             print("Invalid input. Please try again.")
 
-def generate_table_html(confluence_instance, page_id, column_headers, folder, files, date_created, date_of_last_modification, local_location, time_of_upload, date_of_upload):
+def generate_table_html(column_headers, folder, files, date_created, date_of_last_modification, local_location, time_of_upload, date_of_upload):
     
     """Generate HTML code for a table"""
     new_table_html = '<table>' \
@@ -185,9 +186,8 @@ def main():
 
     """Main function"""
 
-    url = 'https://cfpracticesite.atlassian.net'
-    page_id = 65538
-    space_key = 'MFS'
+    url = URL_TO_CONFLUENCE_PAGE
+    page_id = CONFLUENCE_PAGE_ID
     column_headers = ['Folder', 'Files', 'Date Created', 'Date of Last Modification', 'Local Location (Path)', 'Time of Upload', 'Date of Upload']
 
     api_token, username = get_confluence_credentials(path_to_credentials)
@@ -196,7 +196,7 @@ def main():
     page_content = get_page_content(confluence_instance, page_id)
     latest_version_comment = get_latest_version_comment(confluence_instance, page_id)
     next_version_number = get_next_version_number(latest_version_comment)
-    user_input, version_number = get_user_input(page_name, next_version_number)
+    version_number = get_user_input(page_name, next_version_number)
 
     # Refresh Excel file content
     refresh_excel_sheet_and_compare(confluence_instance, page_id, page_content, wb, path_to_excel_sheet)
@@ -229,8 +229,6 @@ def main():
 
         # Creates HTML table
         table_content = generate_table_html(
-            confluence_instance, 
-            page_id, 
             column_headers, 
             folder[0], 
             files.rsplit(',', 1)[0],
@@ -273,6 +271,7 @@ Logic & Functionalty still yet to be implemented:
 - Rather than updating entire table, only add rows to existing table
 - Checks for sub-folders in MASTER_FOLDER
 - Change user from file path to MASTER_FOLDER's account username
+- Add checking to ensure no file corruption for the Excel Sheet
 - Timer set to refresh after period of time (automation later on?)
 
 """
