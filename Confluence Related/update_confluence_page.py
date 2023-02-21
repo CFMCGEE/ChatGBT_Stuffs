@@ -26,7 +26,8 @@ from atlassian import Confluence
 from datetime import datetime, date
 from bs4 import BeautifulSoup as BS
 
-# Load the Excel file
+# Path variables & loading the Excel file
+master_folder = "Master Folder"
 path_to_excel_sheet = 'PUT_EXCEL_SHEET_LOCATION_HERE'
 path_to_credentials = 'PUT_CREDENTIALS_LOCATION_HERE' 
 wb = openpyxl.load_workbook(filename=path_to_excel_sheet)
@@ -172,7 +173,7 @@ def parse_worksheet(ws):
     """Parses a worksheet and returns a dictionary of data grouped by folder path."""
     divided_folders = {}
     for row in ws.iter_rows(min_row=2, values_only=True):
-        path = re.sub(r"^.*MASTER_FOLDER", "", "{v}".format(v=row[5])).replace("\\", "")
+        path = re.sub(fr"^.*{master_folder}", "", "{v}".format(v=row[5])).replace("\\", "")
         if path not in divided_folders:
             divided_folders[path] = []
         divided_folders[path].append({
