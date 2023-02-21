@@ -27,7 +27,7 @@ from datetime import datetime, date
 from bs4 import BeautifulSoup as BS
 
 # Path variables & loading the Excel file
-master_folder = "Master Folder"
+master_folder = 'MASTER_FOLDER'
 path_to_excel_sheet = 'PUT_EXCEL_SHEET_LOCATION_HERE'
 path_to_credentials = 'PUT_CREDENTIALS_LOCATION_HERE' 
 wb = openpyxl.load_workbook(filename=path_to_excel_sheet)
@@ -75,7 +75,7 @@ def refresh_excel_sheet_and_compare(page_content, excel_sheet, excel_sheet_path)
     time.sleep(5)
 
     # Closes Excel file
-    wb.Close(SaveChanges=True)
+    wb.Close(SaveChanges=True) # <-- Automatically saves changes via "True" bool argument
     excel.Quit()
 
     # Waits 5 seconds before re-opening excel sheet
@@ -153,12 +153,12 @@ def get_user_input(page_name, version_number):
         else:
             print("Invalid input. Please try again.")
 
-def generate_table_html(column_headers, folder, files, date_created, date_of_last_modification, local_location, time_of_upload, date_of_upload):
+def generate_table_html(column_headers, folder, files, keywords, date_created, date_of_last_modification, local_location, date_of_upload):
     
     """Generate HTML code for a table"""
     new_table_html = '<table>' \
                     '<tr>' + ''.join([f'<th style="width:auto">{header}</th>' for header in column_headers]) + '</tr>' \
-                    '<tr>' + ''.join([f'<td>{value}</td>' for value in [folder, files, date_created, date_of_last_modification, local_location, time_of_upload, date_of_upload]]) + '</tr>' \
+                    '<tr>' + ''.join([f'<td>{value}</td>' for value in [folder, files, keywords, date_created, date_of_last_modification, local_location, date_of_upload]]) + '</tr>' \
                     '</table>'
 
     return new_table_html
@@ -193,7 +193,7 @@ def main():
 
     url = URL_TO_CONFLUENCE_PAGE
     page_id = CONFLUENCE_PAGE_ID
-    column_headers = ['Folder', 'Files', 'Date Created', 'Date of Last Modification', 'Local Location (Path)', 'Time of Upload', 'Date of Upload']
+    column_headers = ['Folder', 'Files', 'Keywords', 'Date Created', 'Date of Last Modification', 'Local Location (Path)', 'Date of Upload']
 
     api_token, username = get_confluence_credentials(path_to_credentials)
     confluence_instance = get_confluence_instance(url, username, api_token)
@@ -207,7 +207,7 @@ def main():
     refresh_excel_sheet_and_compare(confluence_instance, page_id, page_content, wb, path_to_excel_sheet)
 
     # Column headers as HTML 
-    column_headers_html = '<table><tr><th style="width:auto">Folder</th><th style="width:auto">Files</th><th style="width:auto">Date Created</th><th style="width:auto">Date of Last Modification</th><th style="width:auto">Local Location (Path)</th><th style="width:auto">Time of Upload</th><th style="width:auto">Date of Upload</th></tr>'
+    column_headers_html = '<table><tr><th style="width:auto">Folder</th><th style="width:auto">Files</th><th style="width:auto">Keywords</th><th style="width:auto">Date Created</th><th style="width:auto">Date of Last Modification</th><th style="width:auto">Local Location (Path)</th><th style="width:auto">Date of Upload</th></tr>'
 
     # Folders parser
     folders = parse_worksheet(ws)
@@ -218,6 +218,7 @@ def main():
         # Input values
         folder = []
         files = ""
+        keywords = ([] or "Keywords have yet to be inserted...")
         date_created = []
         date_of_last_modification = []
         local_location = []
@@ -274,9 +275,15 @@ Logic & Functionalty still yet to be implemented:
 
 - Removing files if they are removed from Confluence Page
 - Rather than updating entire table, only add rows to existing table
+- Find excel sheet by name rather than trying to hardcode it
+- Check for "WIP" vs "Finished" for column 'Categories'
+    - 6 pillar logic (?)
 - Checks for sub-folders in MASTER_FOLDER
 - Change user from file path to MASTER_FOLDER's account username
-- Add checking to ensure no file corruption for the Excel Sheet
+- Add way to create keywords based on file extension
+- Remove manual user input for version comment creation
+    - Automate version comment creation by listing folders/files that are being added to the page
 - Timer set to refresh after period of time (automation later on?)
+
 
 """
